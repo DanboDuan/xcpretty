@@ -17,6 +17,8 @@ module XCPretty
     def format_clean(project, target, configuration);          EMPTY; end
     def format_clean_target(target, project, configuration);   EMPTY; end
     def format_clean_remove;                                   EMPTY; end
+    def format_scan_dependencies(file_name, file_path);        EMPTY; end
+    def format_scan_command(command, file_path);               EMPTY; end
     def format_compile(file_name, file_path);                  EMPTY; end
     def format_compile_command(compiler_command, file_path);   EMPTY; end
     def format_compile_storyboard(file_name, file_path);       EMPTY; end

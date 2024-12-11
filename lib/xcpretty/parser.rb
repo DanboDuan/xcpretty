@@ -55,6 +55,16 @@ module XCPretty
     # @regex Captured groups
     # $1 file_path
     # $2 file_name (e.g. KWNull.m)
+    SCAN_MATCHER = /^ScanDependencies\s[\w]+\s((?:\\.|[^ ])+\/((?:\\.|[^ ])+\.(?:m|mm|c|cc|cpp|cxx|swift)))\s.*/
+
+    # @regex Captured groups
+    # $1 compiler_command
+    # $2 file_path
+    SCAN_COMMAND_MATCHER = /^\s*(builtin\-ScanDependencies\s.*\s(\-\-analyze|\-c)\s(.*\.(?:m|mm|c|cc|cpp|cxx))\s.*\.o)$/
+
+    # @regex Captured groups
+    # $1 file_path
+    # $2 file_name (e.g. KWNull.m)
     COMPILE_MATCHER = /^Compile[\w]+\s.+?\s((?:\\.|[^ ])+\/((?:\\.|[^ ])+\.(?:m|mm|c|cc|cpp|cxx|swift)))\s.*/
 
     # @regex Captured groups
@@ -342,6 +352,10 @@ module XCPretty
         formatter.format_error($1)
       when NO_CERTIFICATE_MATCHER
         formatter.format_error($1)
+      when SCAN_MATCHER
+        formatter.format_scan_dependencies($2, $1)
+      when SCAN_COMMAND_MATCHER
+        formatter.format_scan_command($1, $3)
       when COMPILE_MATCHER
         formatter.format_compile($2, $1)
       when COMPILE_COMMAND_MATCHER

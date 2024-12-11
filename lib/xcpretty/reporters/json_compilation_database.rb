@@ -1,3 +1,5 @@
+require 'json'
+
 module XCPretty
   class JSONCompilationDatabase < Reporter
 
@@ -18,6 +20,7 @@ module XCPretty
       @pch_path = nil
       @current_file = nil
       @current_path = nil
+      @directory = '/'
     end
 
     def format_process_pch_command(file_path)
@@ -29,9 +32,15 @@ module XCPretty
       @current_path = file_path
     end
 
+    def format_shell_command(command, arguments)
+      return if @current_path.nil? || command != "cd"
+      @directory = arguments.strip
+    end
+
+
     def format_compile_command(compiler_command, file_path)
       directory = file_path.gsub("#{@current_path}", '').gsub(/\/$/, '')
-      directory = '/' if directory.empty?
+      directory = @directory if directory.empty?
 
       cmd = compiler_command
       cmd = cmd.gsub(/(\-include)\s.*\.pch/, "\\1 #{@pch_path}") if @pch_path
@@ -43,7 +52,7 @@ module XCPretty
 
     def write_report
       File.open(@filepath, 'w') do |f|
-        f.write(@compilation_units.to_json)
+        f.write(JSON.pretty_generate(@compilation_units))
       end
     end
   end

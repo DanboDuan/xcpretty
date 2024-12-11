@@ -39,6 +39,10 @@ module XCPretty
       format("Cleaning", "#{project}/#{target} [#{configuration}]")
     end
 
+    def format_scan_dependencies(file_name, file_path)
+      format("Scanning", file_name)
+    end
+
     def format_compile(file_name, file_path)
       format("Compiling", file_name)
     end
